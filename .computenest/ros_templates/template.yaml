@@ -194,6 +194,15 @@ Parameters:
           Fn::Equals:
             - ExistingVPC
             - ${VpcOption}
+  BaiLianApiKey:
+    NoEcho: true
+    Type: String
+    Description:
+      zh-cn: 开通百炼模型服务，并获得 API-KEY。请参考： <a href="https://help.aliyun.com/zh/model-studio/getting-started/first-api-call-to-qwen"  target="_blank">首次调用百炼API</a>。
+      en: 'Activate BaiLian and obtain the API-KEY. Please refer to:  <a href="https://help.aliyun.com/zh/model-studio/getting-started/first-api-call-to-qwen"  target="_blank">First call to BaiLian API</a>.'
+    Label:
+      zh-cn: 百炼 API-KEY
+      en: BaiLian API-KEY
 Resources:
   # 新建vpc
   EcsVpc:
@@ -302,6 +311,11 @@ Resources:
             systemctl enable deepseek-bailian
             
             fi
+            cat > /root/application/.env << "EOF"
+            OPENAI_API_KEY=${BaiLianApiKey}
+            EOF
+
+            systemctl is-active --quiet deepseek-bailian && systemctl stop deepseek-bailian
             systemctl daemon-reload
             systemctl start deepseek-bailian
           - RegionId:
@@ -332,6 +346,7 @@ Metadata:
       - Parameters:
           - EcsInstanceType
           - InstancePassword
+          - BaiLianApiKey
         Label:
           default: 资源配置
       - Parameters:
