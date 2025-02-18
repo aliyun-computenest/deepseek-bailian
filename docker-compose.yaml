@@ -1,0 +1,15 @@
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    volumes:
+      - open-webui:/app/backend/data
+    ports:
+      - 8080:8080
+    environment:
+      - 'ENABLE_OPENAI_API=True'
+      - 'OPENAI_API_BASE_URL=https://dashscope.aliyuncs.com/compatible-model/v1'
+      - 'OPENAI_API_KEY=${OPENAI_API_KEY}'
+    restart: unless-stopped
+volumes:
+  open-webui: {}
