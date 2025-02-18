@@ -8,8 +8,10 @@ services:
       - 8080:8080
     environment:
       - 'ENABLE_OPENAI_API=True'
-      - 'OPENAI_API_BASE_URL=https://dashscope.aliyuncs.com/compatible-model/v1'
+      - 'ENABLE_OLLAMA_API=False'
+      - 'OPENAI_API_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1'
       - 'OPENAI_API_KEY=${OPENAI_API_KEY}'
+      - 'OPENAI_API_CONFIGS={"0":{"enable":true,"prefix_id":"","model_ids":["deepseek-r1","deepseek-v3"]}}'
     restart: unless-stopped
 volumes:
   open-webui: {}

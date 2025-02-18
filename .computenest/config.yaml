@@ -22,20 +22,6 @@ Service:
             Type: Custom
             Parameters:
               - InstancePassword
-    ParameterConfigs:
-      - TemplateName: 'ECS单机版'
-        Parameters:
-          OPENAI_API_KEY:
-            Type: String
-            Default: ''
-            Description: DashScopeApiKey
-        Metadata:
-           ParameterGroups:
-             - Parameters:
-                 - OPENAI_API_KEY
-               DefaultEnvFilePath: ../.env.example
-               Formatter: env
-               Name: Default
   DeployMetadata:
     SupplierDeployMetadata:
       SupplierTemplateConfigs:
