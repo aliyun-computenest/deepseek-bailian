@@ -69,7 +69,7 @@ Parameters:
     Label:
       en: ECS Instance Charge Type
       zh-cn: 付费类型
-    Default: PostPaid
+    Default: PrePaid
     AllowedValues:
       - PostPaid
       - PrePaid
@@ -124,11 +124,45 @@ Parameters:
       zh-cn: 实例类型
     AssociationProperty: ALIYUN::ECS::Instance::InstanceType
     AssociationPropertyMetadata:
+      ZoneId: ${ZoneId}
       InstanceChargeType: ${PayType}
-      Constraints:
-        InstanceTypeFamily:
-          - ecs.u1
-          - ecs.e
+  SystemDiskCategory:
+    Type: String
+    AllowedValues:
+      - cloud_efficiency
+      - cloud_essd
+      - cloud_essd_entry
+    Label:
+      en: System Disk Category
+      zh-cn: 系统盘类型
+    AssociationPropertyMetadata:
+      LocaleKey: DiskCategory
+  SystemDiskSize:
+    Type: Number
+    Label:
+      zh-cn: 系统盘空间 (GB)
+      en: System Disk Space (GB)
+    MinValue: 40
+    MaxValue: 2000
+  InternetChargeType:
+    Type: String
+    Label:
+      zh-cn: 带宽付费类型
+      en: Internet Charge Type
+    AssociationPropertyMetadata:
+      ValueLabelMapping:
+        PayByTraffic: 按流量计费
+        PayByBandwidth: 按固定带宽计费
+    AllowedValues:
+      - PayByBandwidth
+      - PayByTraffic
+  InternetMaxBandwidthOut:
+    Type: Number
+    Label:
+      zh-cn: 公网带宽 (Mbps)
+      en: Internet Max Bandwidth Out (Mbps)
+    MinValue: 1
+    MaxValue: 100
   InstancePassword:
     NoEcho: true
     Type: String
@@ -269,11 +303,17 @@ Resources:
       ImageId: ecs_image_deepseek-bailian
       Password:
         Ref: InstancePassword
+      SystemDiskCategory:
+        Ref: SystemDiskCategory
+      SystemDiskSize:
+        Ref: SystemDiskSize
+      MaxAmount: 1
       InstanceType:
         Ref: EcsInstanceType
-      SystemDiskCategory: cloud_essd
-      SystemDiskSize: 200
-      InternetMaxBandwidthOut: 5
+      InternetMaxBandwidthOut:
+        Ref: InternetMaxBandwidthOut
+      InternetChargeType:
+        Ref: InternetChargeType
       IoOptimized: optimized
       MaxAmount: 1
   RunInstallCommand:
@@ -291,24 +331,24 @@ Resources:
           - |
             file_path="/etc/systemd/system/deepseek-bailian.service"
             if [ ! -f "$file_path" ]; then
-                cat > $file_path <<EOF
-                [Unit]
-                Description=Docker Compose Application Service
-                Requires=docker.service
-                After=docker.service
+            cat > $file_path <<EOF
+            [Unit]
+            Description=Docker Compose Application Service
+            Requires=docker.service
+            After=docker.service
 
-                [Service]
-                Type=oneshot
-                RemainAfterExit=yes
-                WorkingDirectory=/root/application
-                ExecStart=/usr/bin/docker compose -f docker-compose.yaml up -d
-                ExecStop=/usr/bin/docker compose down
-                TimeoutStartSec=0
+            [Service]
+            Type=oneshot
+            RemainAfterExit=yes
+            WorkingDirectory=/root/application
+            ExecStart=/usr/bin/docker compose -f docker-compose.yaml up -d
+            ExecStop=/usr/bin/docker compose down
+            TimeoutStartSec=0
 
-                [Install]
-                WantedBy=multi-user.target
-                EOF
-                systemctl enable deepseek-bailian
+            [Install]
+            WantedBy=multi-user.target
+            EOF
+            systemctl enable deepseek-bailian
             fi
             cat > /root/application/.env << "EOF"
             OPENAI_API_KEY=${BaiLianApiKey}
@@ -319,7 +359,7 @@ Resources:
             systemctl start deepseek-bailian
           - RegionId:
               Ref: ALIYUN::Region
-Outputs: 
+Outputs:
   open-webui_address:
     Description:
       en: open-webui address.
@@ -337,17 +377,24 @@ Metadata:
   ALIYUN::ROS::Interface:
     ParameterGroups:
       - Parameters:
+          - EcsInstanceType
+          - InternetChargeType
+          - InternetMaxBandwidthOut
+          - SystemDiskCategory
+          - SystemDiskSize
+        Label:
+          default: 资源配置
+      - Parameters:
           - PayType
           - PayPeriodUnit
           - PayPeriod
         Label:
           default: 付费类型配置
       - Parameters:
-          - EcsInstanceType
           - InstancePassword
           - BaiLianApiKey
         Label:
-          default: 资源配置
+          default: 服务配置
       - Parameters:
           - ZoneId
           - VpcOption
