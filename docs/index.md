@@ -87,3 +87,8 @@ AI模型的运行需要使用GPU，价格较高。例如，deepseek-r1满血版�
 在网页的右上方，能看见deepseek-r1字样时，就可以正常使用满血版deepseek-r1模型了。
 
 ![](setting5.png)
+
+
+## FAQ
+
+DeepSeek-R1开启思考模式 [参考社区方案](https://www.zhihu.com/question/10904918866/answer/99141193645)

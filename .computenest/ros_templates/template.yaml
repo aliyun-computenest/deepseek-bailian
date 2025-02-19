@@ -81,9 +81,8 @@ Parameters:
     Label:
       en: Pay Period Unit
       zh-cn: 购买资源时长周期
-    Default: Month
+    Default: Year
     AllowedValues:
-      - Month
       - Year
     AssociationProperty: PayPeriodUnit
     AssociationPropertyMetadata:
@@ -101,14 +100,6 @@ Parameters:
     Default: 1
     AllowedValues:
       - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
     AssociationProperty: PayPeriod
     AssociationPropertyMetadata:
       Visible:
