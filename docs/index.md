@@ -42,26 +42,19 @@ Open WebUI面板在阿里云上的费用主要涉及：
 ## 部署流程
 
 ### 部署步骤
+1. 单击[部署链接](https://computenest.console.aliyun.com/service/palworld/deploy?ServiceId=service-5ad5f65c6c5f4c3fb838)，进入服务实例部署界面，根据界面提示，填写参数。
+    ![](deploy_1.jpg)
+2. 部署参数需要百炼API-KEY，
+**[登录百炼控制台](https://bailian.console.aliyun.com/)**，光标悬停在右上角人行图标上，点击**API-KEY**。
+    ![](bailian1.png)
+    点击**创建我的API-KEY**，并复制它备用。API-KEY是个人保密信息，切勿泄漏。
+    ![](bailian2.png)
 
-AI模型的运行需要使用GPU，价格较高。例如，deepseek-r1满血版，如果使用GPU部署，每月需花费数万元。使用百炼，用户不需要自己在GPU上部署模型，而是通过百炼提供的API使用AI模型。按使用的token数计费。
-
-
-
-1. 单击部署链接，进入服务实例部署界面，根据界面提示，填写参数完成部署。添加部署参数需要选择百炼key
-**登录百炼控制台，获取百炼API地址和API-KEY**
-[阿里云登录 - 欢迎登录阿里云，安全稳定的云计算服务平台](https://bailian.console.aliyun.com/)
-光标悬停在右上角人行图标上，点击“API-KEY”
-![](bailian1.png)
-点击“创建我的API-KEY”，创建API-KEY，并复制它备用。API-KEY是个人保密信息，切勿泄漏。
-![](bailian2.png)
-
-2. 参数填写完成后可以看到对应询价明细，确认参数后点击**下一步：确认订单**
-![deploy.png](deploy.png)
-3. 确认订单完成后同意服务协议并点击**立即创建**
+3. 确认订单完成后点击**立即创建**。
 4. 等待部署完成后就可以开始使用服务，进入服务实例详情点击Address访问。
-![result.png](result.png)
-5.使用服务
-![login.png](login.png)
+    ![result.png](result.png)
+5. 使用服务
+    ![login.png](login.png)
 
 ## 使用服务
 
