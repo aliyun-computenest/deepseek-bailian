@@ -27,7 +27,7 @@ Open WebUI面板在阿里云上的费用主要涉及：
 
 部署架构采用ECS(云服务器)单机部署
 
-![architecture_ecs_single.png](architecture_ecs_single.png)
+<img width="600" src="architecture_ecs_single.png"/>
 
 ## RAM账号所需权限
 
