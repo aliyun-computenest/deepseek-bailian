@@ -39,9 +39,8 @@ Open WebUI面板在阿里云上的费用主要涉及：
 | AliyunComputeNestUserFullAccess | 管理计算巢服务（ComputeNest）的用户侧权限 |
 
 
-## 部署流程
+## 部署服务
 
-### 部署步骤
 1. 单击[部署链接](https://computenest.console.aliyun.com/service/palworld/deploy?ServiceId=service-5ad5f65c6c5f4c3fb838)，进入服务实例部署界面，根据界面提示，填写参数。
     ![](deploy_1.jpg)
 2. 部署参数需要百炼API-KEY，**[登录百炼控制台](https://bailian.console.aliyun.com/)**，光标悬停在右上角人行图标上，点击**API-KEY**。
@@ -53,36 +52,17 @@ Open WebUI面板在阿里云上的费用主要涉及：
 3. 确认订单完成后点击**立即创建**。
 4. 等待部署完成后就可以开始使用服务，进入服务实例详情点击Address访问。
     ![result.png](result.png)
-5. 使用服务
+
+5. 注册账号并登录服务。
     ![login.png](login.png)
 
-## 使用服务
+6. 登录成功后即可使用deepseek对话。点击左上角模型可以切换其它模型。
+    ![use.png](use.jpg)
 
-访问刚才创建好的Open WebUI
 
-点击网页左下角的用户名图标，点击“设置”
 
-<img width="400" src="setting1.png"/>
+## 进阶操作（使用域名并绑定证书）
 
-点击“管理员设置”
-
-<img width="600" src="setting2.png"/>
-
-点击“外部连接”，然后点击“管理OpenAPI连接”右边的“+”符号。
-
-<img width="600" src="setting3.png"/>
-
-在“模型ID”中输入deepseek-r1，注意需要小写。
-
-最后点击保存。
-
-<img width="600" src="setting4.png"/>
-
-在网页的右上方，能看见deepseek-r1字样时，就可以正常使用满血版deepseek-r1模型了。
-
-<img width="600" src="setting5.png"/>
-
-## 使用域名并绑定证书
 使用IP地址，例如http://公网IP:8080，访问自己部署的AI网站，不方便记忆，更不够酷。通过域名访问时，完整的方式是：https://example.com。大家平时可能不会注意到域名最左边的https。这是目前最常见的访问互联网的协议。早期的协议为http，后来为了增强安全性，在http后面加了个 "s"，即超文本传输安全协议，使用https需要SSL证书。现在大多数的网站都使用https，如果使用http，浏览器会提示不安全。另外，在开发微信小程序，苹果iOS app时，要求必须使用https。
 
 ### 一、购买域名，并完成域名备案，域名备案通常几天就可以完成。
