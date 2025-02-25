@@ -54,11 +54,22 @@ Open WebUI面板在阿里云上的费用主要涉及：
     ![result.png](result.png)
 
 5. 注册账号并登录服务。
-    ![login.png](login.png)
+    ![login.png](login.jpg)
 
-6. 登录成功后即可使用deepseek对话。点击左上角模型可以切换其它模型。
-    ![use.png](use.jpg)
+6. 登录成功后点击头像->设置。
+    ![use.png](use_1.jpg)
 
+7. 点击外部链接配置项中的添加链接按钮。
+    ![use.png](use_2.jpg)
+
+8. 输入URL和密钥（上文获取的APIKEY），添加要使用的模型ID（在[百炼模型广场](https://bailian.console.aliyun.com/#/model-market)选择目标模型，点击查看详后复制模型名称，粘贴到截图所示位置后添加），添加完成后保存配置。
+    ```text
+   https://dashscope.aliyuncs.com/compatible-mode/v1/
+   ```
+    ![use.png](use_3.jpg)
+
+9. 配置完成后即可选择模型对话。
+    ![use.png](use_4.jpg)
 
 
 ## 进阶操作（使用域名并绑定证书）
