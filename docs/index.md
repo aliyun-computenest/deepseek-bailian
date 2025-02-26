@@ -20,9 +20,12 @@ Open WebUI面板在阿里云上的费用主要涉及：
 * 所选GPU云服务器的规格
 * 磁盘容量
 * 公网带宽
-* 百炼模型调用费用（当您首次开通百炼时，平台会自动为您发放各模型的新人专属免费额度。），详情请看[百炼新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota?spm=a2c4g.11186623.help-menu-2400256.d_4_1.6dea55efFQCijR#view-quota)。
+
 计费方式：按量付费（小时）或包年包月
 预估费用在创建实例时可实时看到。
+
+百炼模型调用费用:
+* 当您首次开通百炼时，平台会自动为您发放各模型的新人专属免费额度，详情请看[百炼新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota?spm=a2c4g.11186623.help-menu-2400256.d_4_1.6dea55efFQCijR#view-quota)。
 
 ## 部署架构
 
