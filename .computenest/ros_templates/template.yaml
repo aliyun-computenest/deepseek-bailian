@@ -71,8 +71,8 @@ Parameters:
       zh-cn: 付费类型
     Default: PrePaid
     AllowedValues:
-      - PostPaid
       - PrePaid
+      - PostPaid
     AssociationProperty: ChargeType
     AssociationPropertyMetadata:
       LocaleKey: InstanceChargeType
@@ -81,11 +81,13 @@ Parameters:
     Label:
       en: Pay Period Unit
       zh-cn: 购买资源时长周期
-    Default: Year
+    Default: Month
     AllowedValues:
-      - Year
+      - Month
     AssociationProperty: PayPeriodUnit
     AssociationPropertyMetadata:
+      ValueLabelMapping:
+        Month: 月
       Visible:
         Condition:
           Fn::Not:
@@ -97,9 +99,10 @@ Parameters:
     Label:
       en: Period
       zh-cn: 购买资源时长
-    Default: 1
+    Default: 12
     AllowedValues:
-      - 1
+      - 3
+      - 12
     AssociationProperty: PayPeriod
     AssociationPropertyMetadata:
       Visible:
@@ -170,6 +173,8 @@ Parameters:
     MinLength: 8
     MaxLength: 30
     AssociationProperty: ALIYUN::ECS::Instance::Password
+    AssociationPropertyMetadata:
+      Random: true
   ZoneId:
     Type: String
     Label:
@@ -223,8 +228,8 @@ Parameters:
     NoEcho: true
     Type: String
     Description:
-      zh-cn: 开通百炼模型服务，并获得 API-KEY。请参考： <a href="https://help.aliyun.com/zh/model-studio/getting-started/first-api-call-to-qwen"  target="_blank">首次调用百炼API</a>。
-      en: 'Activate BaiLian and obtain the API-KEY. Please refer to:  <a href="https://help.aliyun.com/zh/model-studio/getting-started/first-api-call-to-qwen"  target="_blank">First call to BaiLian API</a>.'
+      zh-cn: 开通百炼模型服务，并获得 API-KEY。请参考： <a href="https://developer.aliyun.com/article/1655158"  target="_blank">获取百炼API-KEY</a>。
+      en: 'Activate BaiLian and obtain the API-KEY. Please refer to:  <a href="https://developer.aliyun.com/article/1655158"  target="_blank">Get BaiLian API-KEY</a>.'
     Label:
       zh-cn: 百炼 API-KEY
       en: BaiLian API-KEY
@@ -263,6 +268,16 @@ Resources:
           - Ref: VpcId
       SecurityGroupIngress:
         - PortRange: 8080/8080
+          Priority: 1
+          SourceCidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          NicType: internet
+        - PortRange: 22/22
+          Priority: 1
+          SourceCidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          NicType: internet
+        - PortRange: 443/443
           Priority: 1
           SourceCidrIp: 0.0.0.0/0
           IpProtocol: tcp
@@ -306,7 +321,6 @@ Resources:
       InternetChargeType:
         Ref: InternetChargeType
       IoOptimized: optimized
-      MaxAmount: 1
   RunInstallCommand:
     Type: ALIYUN::ECS::RunCommand
     Properties:
@@ -348,6 +362,35 @@ Resources:
             systemctl is-active --quiet deepseek-bailian && systemctl stop deepseek-bailian
             systemctl daemon-reload
             systemctl start deepseek-bailian
+
+            cd /root/application
+
+            # 设置需要检查的服务名称
+            SERVICE_NAME="open-webui"
+
+            # 获取容器ID
+            CONTAINER_ID=$(docker compose ps -q $SERVICE_NAME)
+
+            # 检查容器健康状态
+            check_health_status() {
+              STATUS=$(docker inspect --format='{{.State.Health.Status}}' $CONTAINER_ID)
+
+              if [ "$STATUS" == "healthy" ]; then
+                echo "Container $SERVICE_NAME is healthy."
+                return 0
+              else
+                echo "Container $SERVICE_NAME status: $STATUS. Waiting..."
+                return 1
+              fi
+            }
+
+            # 循环检查健康状态，直到服务变为healthy
+            while true; do
+              if check_health_status; then
+                exit 0
+              fi
+              sleep 10
+            done
           - RegionId:
               Ref: ALIYUN::Region
 Outputs:
@@ -368,24 +411,24 @@ Metadata:
   ALIYUN::ROS::Interface:
     ParameterGroups:
       - Parameters:
-          - EcsInstanceType
-          - InternetChargeType
-          - InternetMaxBandwidthOut
-          - SystemDiskCategory
-          - SystemDiskSize
-        Label:
-          default: 资源配置
-      - Parameters:
           - PayType
           - PayPeriodUnit
           - PayPeriod
         Label:
           default: 付费类型配置
       - Parameters:
+          - EcsInstanceType
+          - InternetChargeType
+          - InternetMaxBandwidthOut
+          - SystemDiskCategory
+          - SystemDiskSize
           - InstancePassword
+        Label:
+          default: 服务器基础配置
+      - Parameters:
           - BaiLianApiKey
         Label:
-          default: 服务配置
+          default: 配置百炼服务
       - Parameters:
           - ZoneId
           - VpcOption
@@ -394,4 +437,90 @@ Metadata:
           - VpcCidrBlock
           - VSwitchCidrBlock
         Label:
-          default: 可用区配置
+          default: 配置专有网络
+    QuickDeployConfig:
+      PackageFields:
+        - Key: EcsInstanceType
+        - Key: SystemDiskCategory
+          Label:
+            zh-cn: 系统盘
+            en: System Disk
+          Value: '${SystemDiskCategory} / ${SystemDiskSize} GB'
+        - Key: InternetChargeType
+          Label:
+            zh-cn: 公网带宽
+            en: Internet Charge Type
+          Value: '${InternetChargeType } / ${InternetMaxBandwidthOut} Mbps'
+        - Key: PayType
+          Label:
+            zh-cn: 付费类型
+            en:  Pay Type
+          Value: '${PayType}'
+        - Key: PayPeriodUnit
+          Label:
+            zh-cn: 付费时长
+            en: Pay Period
+          Value: '${PayPeriod} ${PayPeriodUnit}'
+      PredefinedParameters:
+        - Name: 热卖套餐，特价99元/年（限购1台）
+          Parameters:
+            EcsInstanceType: ecs.e-c1m1.large
+            SystemDiskCategory: cloud_essd_entry
+            SystemDiskSize: 40
+            InternetChargeType: PayByBandwidth
+            InternetMaxBandwidthOut: 3
+            PayPeriodUnit: Month
+            PayPeriod: 12
+            PayType: PrePaid
+          OrderList:
+            - EcsInstanceType
+            - SystemDiskCategory
+            - SystemDiskSize
+            - InternetChargeType
+            - InternetMaxBandwidthOut
+            - PayPeriodUnit
+            - PayPeriod
+            - PayType
+          Type: Normal
+          Description: 固定带宽不限流量，新老同享，上云首选！
+        - Name: 尝鲜套餐，只需0.3元/小时
+          Parameters:
+            EcsInstanceType: ecs.e-c1m1.large
+            SystemDiskCategory: cloud_essd_entry
+            SystemDiskSize: 40
+            InternetChargeType: PayByBandwidth
+            InternetMaxBandwidthOut: 3
+            PayPeriodUnit: Month
+            PayPeriod: 12
+            PayType: PostPaid
+          OrderList:
+            - EcsInstanceType
+            - SystemDiskCategory
+            - SystemDiskSize
+            - InternetChargeType
+            - InternetMaxBandwidthOut
+            - PayPeriodUnit
+            - PayPeriod
+            - PayType
+          Type: Normal
+          Description: 可用300元学生专属代金券抵扣！<a href="https://university.aliyun.com" target="_blank">立即领取</a>
+        - Name: 自定义套餐
+          Parameters: {}
+          OrderList:
+            - EcsInstanceType
+            - SystemDiskCategory
+            - SystemDiskSize
+            - InternetChargeType
+            - InternetMaxBandwidthOut
+            - PayPeriodUnit
+            - PayPeriod
+            - PayType
+          Type: Custom
+      CustomFields:
+        - Key: InstancePassword
+        - Key: BaiLianApiKey
+      CostRelatedKeys:
+        - RegionId
+        - PayPeriod
+      AutomaticZone:
+        ZoneIdKey: ZoneId
