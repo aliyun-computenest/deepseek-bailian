@@ -1,0 +1,15 @@
+templateName: ECS单机版
+regionId: cn-hangzhou
+parameters:
+  BaiLianApiKey: "Please fill in"
+  VpcCidrBlock: "192.168.0.0/16"
+  InternetMaxBandwidthOut: "Please fill in"
+  SystemDiskSize: "Please fill in"
+  VpcOption: "NewVPC"
+  PayType: "PostPaid"
+  EcsInstanceType: "$[iact3-auto]"
+  VSwitchCidrBlock: "192.168.1.0/24"
+  SystemDiskCategory: "Please fill in"
+  InternetChargeType: "Please fill in"
+  InstancePassword: "$[iact3-auto]"
+caseId: stc-d96661cd771445429c8b
