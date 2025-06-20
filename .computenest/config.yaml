@@ -44,8 +44,21 @@ Service:
   ServiceInfo:
     # 英文版可以再配置Locale为en-US的服务信息
   - Locale: zh-CN
-    Name: DeepSeek个人站点
-    ShortDescription: Service description
+    Name: DeepSeek个人站点-快速部署
+    ShortDescription: 本服务集成了百炼API和Open WebUI且具备以下优势： 1. 稳定使用，服务器不再繁忙； 2. 高性价比，日均使用成本仅需1元左右；
+      3. 个人专属AI网站，可绑定个人域名，共享亲友使用； 4. 更丰富的AI模型选择，deepseek、通义、Llama等； 日均使用成本按用户平均使用情况估算，实际情况会因您使用的token差异，导致费用有所变化，请以控制台显示的实际报价以及最终账单为准。
+    Image: 
+      https://service-info-public.oss-cn-hangzhou.aliyuncs.com/1853370294850618/service-image/bfd30cc4-e959-4093-b5cb-77a05058b911.png
+    Softwares: []
+  - Locale: en-US
+    Name: DeepSeek Personal Site-Quick Deployment
+    ShortDescription: 'This service integrates Bailian API and Open WebUI and has
+      the following advantages: 1. Stable use, the server is no longer busy; 2. High
+      cost-effectiveness, the average daily usage cost is only about 1 yuan; 3. Personal
+      exclusive AI website, which can be bound to a personal domain name and shared
+      with relatives and friends; 4. A richer selection of AI models, including deepseek,
+      Tongyi, Llama, etc. The average daily usage cost is estimated based on the average
+      user usage. '
     Image: 
       https://service-info-public.oss-cn-hangzhou.aliyuncs.com/1853370294850618/service-image/bfd30cc4-e959-4093-b5cb-77a05058b911.png
     Softwares: []
