@@ -28,12 +28,6 @@ The estimated cost can be seen in real time when the instance is created. </p>
 <p> Refined model call cost:
 * When you open the Hundred Refinement for the first time, the platform will automatically issue exclusive free quotas for newcomers of each model. For more information, see <a href = "https://help.aliyun.com/zh/model-studio/new-free-quota?spm=a2c4g.11186623.help-menu-2400256.d_4_1.6dea55efFQCijR#view-quota"> Hundred Refinement Newcomer Free Quota </a>. </p>
 
-<h2> Deployment Architecture </h2>
-
-<p> The deployment architecture adopts ECS (cloud server) single-machine deployment </p>
-
-<p><img width="600" src="architecture_ecs_single.png"/></p>
-
 <h2> Permissions required for RAM accounts </h2>
 
 <table>
@@ -66,16 +60,11 @@ The estimated cost can be seen in real time when the instance is created. </p>
 <h2> Deployment Services </h2>
 
 <ol>
-<li> Click <a href = "https://computenest.console.aliyun.com/service/palworld/deploy?ServiceId=service-5ad5f65c6c5f4c3fb838"> Deployment Link </a> to go to the service instance deployment page. Enter the parameters as prompted.
-<img src="deploy_1.jpg" alt="" /></li>
-<li><p> The deployment parameters need to be API-KEY. <strong><a href = "https://bailian.console.aliyun.com/"> Log in to the console </a></strong>, hover the cursor over the pedestrian icon in the upper right corner, and click <strong>API-KEY</strong>.
-<img src="bailian1.png" alt="" /></p>
-
-<p> Click <strong> Create My API-KEY</strong> and copy it for standby. API-KEY is personal confidential information, do not disclose. If Bailian is not activated, please click <a href = "https://help.aliyun.com/zh/model-studio/getting-started/first-api-call-to-qwen?spm=a2c4g.11186623.help-menu-2400256.d_0_1_0.5a06b0a8lg5WY2#5058e161041ps"> Activate Bailian Model Service </a> to complete the activation.
-<img src="bailian2.png" alt="" /></p></li>
+<li> Click <a href = "https://computenest.console.aliyun.com/service/instance/create/ap-southeast-1?type=user&ServiceId=service-7bbc5e7bf96c4e68b856"> Deployment Link </a> to go to the service instance deployment page. Enter the parameters as prompted.
+<img src="deploy_1_en.jpg" alt="" /></li>
 <li><p> Click <strong> Create Now </strong> after confirming the order is complete. </p></li>
 <li><p> After the deployment is completed, you can start using the service. Enter the service instance details and click Address to access.
-<img src="result.png" alt="result.png" /></p></li>
+<img src="deploy_2_en.jpg" alt="result.png" /></p></li>
 <li><p> Register an account and log in to the service.
 <img src="login.jpg" alt="login.png" /></p></li>
 <li><p> Start your AI conversation.
