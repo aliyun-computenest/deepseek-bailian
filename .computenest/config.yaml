@@ -43,8 +43,9 @@ Service:
   ServiceType: private
   ServiceInfo:
   - Locale: zh-CN
-    ShortDescription: demo
+    ShortDescription: 本服务集成了百炼API和Open WebUI且具备以下优势： 1. 稳定使用，服务器不再繁忙； 2. 高性价比，日均使用成本仅需1元左右； 3. 个人专属AI网站，可绑定个人域名，共享亲友使用； 4. 更丰富的AI模型选择，deepseek、通义、Llama等； 日均使用成本按用户平均使用情况估算，实际情况会因您使用的token差异，导致费用有所变化，请以控制台显示的实际报价以及最终账单为准。
     Image: resources/icons/service_logo.png
+    Name: DeepSeek个人站点-快速部署
     Softwares:
     - Name: open-webui
       Version: v0.6.41
