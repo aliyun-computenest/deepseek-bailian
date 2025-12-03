@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="计算巢是阿里云开放给企业应用服务商的服务管理平台。服务商能够在计算巢上发布私有化部署服务，为其客户提供云上软件一键部署的能力；同时也支持全托管模式的服务，赋能服务商托管其客户资源。">
+  <title>百炼 Open WebUI 服务实例部署文档 - Aliyun 计算巢 x Demo</title>
+
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="css/theme.css">
+  
+
+  
+
+  
+  
+
+  
+    <script src="search/main.js"></script>
+  
+
+  
+
+  <script src="js/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="nav-inner">
+        <div class="logo">
+          <img src="./img/logo-2x.png">
+        </div>
+        <div class="nav-list">
+          <ul>
+          
+              <li><a href="#open-webui">百炼 Open WebUI 服务实例部署文档</a></li>
+              
+                  <li><a href="#open-webui_1">Open WebUI和百炼介绍</a></li>
+                  
+              
+                  <li><a href="#_1">计费说明</a></li>
+                  
+              
+                  <li><a href="#_2">部署架构</a></li>
+                  
+              
+                  <li><a href="#ram">RAM账号所需权限</a></li>
+                  
+              
+                  <li><a href="#_3">部署服务</a></li>
+                  
+              
+                  <li><a href="#_4">进阶操作（使用域名并绑定证书）</a></li>
+                  
+                      <li class="li-h3"><a href="#_5">一、购买域名，并完成域名备案，域名备案通常几天就可以完成。</a></li>
+                  
+                      <li class="li-h3"><a href="#ssl">二、获取免费SSL证书</a></li>
+                  
+                      <li class="li-h3"><a href="#ecsnginx">三、在ECS云服务器上安装并配置nginx</a></li>
+                  
+                      <li class="li-h3"><a href="#sslsslecs">四、创建SSL证书存放目录并保存SSL证书到云服务器ECS</a></li>
+                  
+                      <li class="li-h3"><a href="#nginx">五、配置nginx</a></li>
+                  
+                      <li class="li-h3"><a href="#_6">六、建立软连接</a></li>
+                  
+                      <li class="li-h3"><a href="#_7">七、配置域名解析</a></li>
+                  
+              
+                  <li><a href="#faq">FAQ</a></li>
+                  
+              
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="content theme-github">
+      
+      <div class="content-inner">        
+        
+        <h1 id="open-webui">百炼 Open WebUI 服务实例部署文档</h1>
+<h2 id="open-webui_1">Open WebUI和百炼介绍</h2>
+<p>Open WebUI 是一个功能丰富且用户友好的自托管 Web 用户界面（WebUI），它被设计用于与大型语言模型（LLMs）进行交互，特别是那些由 Ollama 或与 OpenAI API 兼容的服务所支持的模型。Open WebUI 提供了完全离线运行的能力，这意味着用户可以在没有互联网连接的情况下与模型进行对话，这对于数据隐私和安全敏感的应用场景尤为重要。
+以下是 Open WebUI 的一些主要特点：
+1. 直观的界面：Open WebUI 的界面受到 ChatGPT 的启发，提供了一个清晰且用户友好的聊天界面，使得与大型语言模型的交互变得直观。
+2. 扩展性：这个平台是可扩展的，意味着可以通过添加新的插件或功能来定制和增强其能力，适应不同的使用场景和需求。
+3. 离线操作：Open WebUI 支持完全离线运行，不依赖于网络连接，适合在任何设备上使用，无论是在飞机上还是在偏远地区。
+4. 兼容性：它兼容多种 LLM 运行器，包括 Ollama 和 OpenAI 的 API，这使得用户可以从多个来源选择和运行不同的语言模型。
+5. 自托管：用户可以在自己的服务器或设备上部署 Open WebUI，这为数据隐私和控制提供了更高的保障。
+6. Markdown 和 LaTeX 支持：Open WebUI 提供了全面的 Markdown 和 LaTeX 功能，让用户可以生成富文本输出，这在科学和学术交流中非常有用。
+7. 本地 RAG 集成：检索增强生成（RAG）功能允许模型利用本地存储的数据进行更深入和具体的回答，增强了聊天交互的功能。
+通义百炼 是阿里巴巴云推出的一款先进的多模态预训练模型。它结合了自然语言处理（NLP）和计算机视觉（CV）技术，能够理解和生成文本、图像、视频等多种类型的数据。通义百炼的设计目标是为开发者和企业提供一个强大的工具，以便在各种应用场景中实现更高效、更智能的数据处理和分析。</p>
+<p>本服务将openwebui和百炼集成，一键提供基于百炼的ui服务</p>
+<h2 id="_1">计费说明</h2>
+<p>Open WebUI面板在阿里云上的费用主要涉及：
+* 所选GPU云服务器的规格
+* 磁盘容量
+* 公网带宽</p>
+<p>计费方式：按量付费（小时）或包年包月
+预估费用在创建实例时可实时看到。</p>
+<p>百炼模型调用费用:
+* 当您首次开通百炼时，平台会自动为您发放各模型的新人专属免费额度，详情请看<a href="https://help.aliyun.com/zh/model-studio/new-free-quota?spm=a2c4g.11186623.help-menu-2400256.d_4_1.6dea55efFQCijR#view-quota">百炼新人免费额度</a>。</p>
+<h2 id="_2">部署架构</h2>
+<p>部署架构采用ECS(云服务器)单机部署</p>
+<p><img width="600" src="architecture_ecs_single.png"/></p>
+<h2 id="ram">RAM账号所需权限</h2>
+<table>
+<thead>
+<tr>
+<th>权限策略名称</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AliyunECSFullAccess</td>
+<td>管理云服务器服务（ECS）的权限</td>
+</tr>
+<tr>
+<td>AliyunVPCFullAccess</td>
+<td>管理专有网络（VPC）的权限</td>
+</tr>
+<tr>
+<td>AliyunROSFullAccess</td>
+<td>管理资源编排服务（ROS）的权限</td>
+</tr>
+<tr>
+<td>AliyunComputeNestUserFullAccess</td>
+<td>管理计算巢服务（ComputeNest）的用户侧权限</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">部署服务</h2>
+<ol>
+<li>单击<a href="https://computenest.console.aliyun.com/service/palworld/deploy?ServiceId=service-5ad5f65c6c5f4c3fb838">部署链接</a>，进入服务实例部署界面，根据界面提示，填写参数。
+    <img alt="" src="deploy_1.jpg" /></li>
+<li>
+<p>部署参数需要百炼API-KEY，<strong><a href="https://bailian.console.aliyun.com/">登录百炼控制台</a></strong>，光标悬停在右上角人行图标上，点击<strong>API-KEY</strong>。
+    <img alt="" src="bailian1.png" /></p>
+<p>点击<strong>创建我的API-KEY</strong>，并复制它备用。API-KEY是个人保密信息，切勿泄漏。若未开通百炼，请点击<a href="https://help.aliyun.com/zh/model-studio/getting-started/first-api-call-to-qwen?spm=a2c4g.11186623.help-menu-2400256.d_0_1_0.5a06b0a8lg5WY2#5058e161041ps">开通百炼的模型服务</a>完成开通。
+<img alt="" src="bailian2.png" /></p>
+</li>
+<li>
+<p>确认订单完成后点击<strong>立即创建</strong>。</p>
+</li>
+<li>
+<p>等待部署完成后就可以开始使用服务，进入服务实例详情点击Address访问。
+    <img alt="result.png" src="result.png" /></p>
+</li>
+<li>
+<p>注册账号并登录服务。
+    <img alt="login.png" src="login.jpg" /></p>
+</li>
+<li>
+<p>开启你的AI对话。
+    <img alt="login.png" src="use_0.png" /></p>
+</li>
+</ol>
+<h2 id="_4">进阶操作（使用域名并绑定证书）</h2>
+<p>使用IP地址，例如http://公网IP:8080，访问自己部署的AI网站，不方便记忆，更不够酷。通过域名访问时，完整的方式是：https://example.com。大家平时可能不会注意到域名最左边的https。这是目前最常见的访问互联网的协议。早期的协议为http，后来为了增强安全性，在http后面加了个 "s"，即超文本传输安全协议，使用https需要SSL证书。现在大多数的网站都使用https，如果使用http，浏览器会提示不安全。另外，在开发微信小程序，苹果iOS app时，要求必须使用https。</p>
+<h3 id="_5">一、购买域名，并完成域名备案，域名备案通常几天就可以完成。</h3>
+<h3 id="ssl">二、获取免费SSL证书</h3>
+<ol>
+<li>登入阿里云数字证书管理服务（原SSL证书）网站 https://www.aliyun.com/product/cas 点击“登录控制台”</li>
+</ol>
+<p><img alt="Description" src="img.png" width="400"/></p>
+<ol>
+<li>
+<p>点击SSL证书管理</p>
+<p><img alt="Description" src="img_1.png" width="600"/></p>
+</li>
+<li>
+<p>点击“个人测试证书（原免费证书）”，然后点击“立即购买”。</p>
+<p><img alt="Description" src="img_2.png" width="600"/></p>
+</li>
+<li>
+<p>选择“个人测试证书”，可以获得20个免费的个人测试证书。</p>
+<p><img alt="Description" src="img_3.png" width="600"/></p>
+</li>
+<li>
+<p>购买完成后，点击“创建证书”，证书类型选择上一步购买的“个人测试证书（免费版）”，在“域名名称”中，输入域名，例如example.com, 此处可以不用输入www.example.com。然后点击“确定”。</p>
+<p><img alt="Description" src="img_4.png" width="600"/></p>
+</li>
+<li>
+<p>当证书显示“已签发”时，即可以正常使用。请注意，免费证书的有效期一般为三个月。</p>
+<p><img alt="Description" src="img_5.png" width="600"/></p>
+</li>
+<li>
+<p>点击“更多”，准备下载证书。</p>
+<p><img alt="Description" src="img_6.png" width="600"/></p>
+</li>
+<li>
+<p>点击“下载”的tab，点击Nginx后面的“下载”，即可以完成证书的下载。</p>
+<p><img alt="Description" src="img_7.png" width="900"/></p>
+</li>
+<li>
+<p>下载完的证书是一个压缩包，点击解压缩后，文件夹里有两个文件，分别以key和pem作为后缀。</p>
+<p><img alt="Description" src="img_8.png" width="400"/></p>
+</li>
+</ol>
+<h3 id="ecsnginx">三、在ECS云服务器上安装并配置nginx</h3>
+<pre><code class="language-shell">
+# 更新安装包清单
+sudo apt update
+# 安装nginx
+sudo apt install nginx
+# 确认nginx是否安装成功
+sudo systemctl status nginx
+</code></pre>
+<h3 id="sslsslecs">四、创建SSL证书存放目录并保存SSL证书到云服务器ECS</h3>
+<pre><code class="language-shell">
+# 在nginx配置目录中，创建SSL证书存放目录
+mkdir /etc/nginx/ssl
+# 进入SSL证书存放目录
+cd /etc/nginx/ssl
+
+# 创建如下两个文件,此处假设域名为example.com，需要把域名替换成您自己的域名
+touch example.com.key
+touch example.com.pem
+
+# 在电脑上，打开上一步保存的example.com.key文件，复制其中的内容
+
+# 回到ECS云服务器，编辑example.com.key这个文件
+vim example.com.key
+# 点击i，进入编辑模式，并将刚复制的内容，粘贴到云服务器ECS上的example.com.key文件中，完成后，点击ecs退出编辑，输入!wq，保存并退出
+
+# 在电脑上，打开上一步保存的example.com.pem文件，复制其中的内容
+# 回到ECS云服务器，编辑example.com.key这个文件
+vim example.com.pem
+# 点击i，进入编辑模式，并将刚复制的内容，粘贴到云服务器ECS上的example.com.pem文件中，完成后，点击ecs退出编辑，输入!wq，保存并退出
+</code></pre>
+<h3 id="nginx">五、配置nginx</h3>
+<pre><code class="language-shell"># 进入sites-available目录
+cd /etc/nginx/sites-available
+
+# 创建配置文件，注意，此处需要换成您自己的域名
+touch example.com
+</code></pre>
+<p>使用vim example.com命令，打开example.com文件，点击i进行编辑，粘贴以下内容。
+注意：将下列内容中，所有的example.com替换成您自己的域名。</p>
+<pre><code class="language-txt">server {
+    listen 80;
+    server_name example.com www.example.com;
+
+    # Redirect all HTTP requests to HTTPS
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name exameple.com www.example.com;
+
+    # SSL Configuration
+    ssl_certificate /etc/nginx/ssl/example.com.pem;
+    ssl_certificate_key /etc/nginx/ssl/example.com.key;
+
+    # Security headers (optional but recommended)
+    add_header Strict-Transport-Security &quot;max-age=31536000&quot; always;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-Frame-Options &quot;SAMEORIGIN&quot;;
+    add_header X-XSS-Protection &quot;1; mode=block&quot;;
+
+    # Proxy settings
+    location / {
+        proxy_pass http://localhost:8080;  # Your service running on port 8080
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # WebSocket support (if needed)
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection &quot;upgrade&quot;;
+    }
+}
+</code></pre>
+<h3 id="_6">六、建立软连接</h3>
+<p>注意：将下列内容中，所有的example.com替换成您自己的域名。</p>
+<pre><code class="language-shell">sudo ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/
+</code></pre>
+<p>重新load nginx</p>
+<pre><code class="language-shell">sudo systemctl reload nginx
+</code></pre>
+<h3 id="_7">七、配置域名解析</h3>
+<p>进入域名解析dns控制台
+https://dns.console.aliyun.com/
+选中需要使用的域名，点击“解析设置”</p>
+<p><img alt="Description" src="img_9.png" width="1000"/></p>
+<p>点击添“加记录”</p>
+<p><img alt="Description" src="img_10.png" width="500"/></p>
+<p>按照如下方式填写记录内容，然后点击“确定”，约1分钟后生效。即可以通过域名访问您部署的AI网站。</p>
+<p><img alt="Description" src="img_11.png" width="400"/></p>
+<h2 id="faq">FAQ</h2>
+<p>DeepSeek-R1开启思考模式 <a href="https://www.zhihu.com/question/10904918866/answer/99141193645">参考社区方案</a></p>
+        
+      </div>
+
+      <div class="copyrights">© 2009-2022 Aliyun.com 版权所有</div>
+    </div>
+  </div>
+  
+  <!--
+  MkDocs version      : 1.6.1
+  Docs Build Date UTC : 2025-12-03 11:04:27.066572+00:00
+  -->
+</body>
+</html>
