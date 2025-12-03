@@ -3,56 +3,58 @@ Service:
   DeployType: ros
   OperationMetadata:
     StatusOperationConfigs:
-      - TemplateName: ECS单机版
-        SupportOperations:
-          - Start
-          - Stop
-          - Restart
+    - TemplateName: ECS单机版
+      SupportOperations:
+      - Start
+      - Stop
+      - Restart
     SupportBackup: true
     ModifyParametersConfig:
-      - TemplateName: ECS单机版
-        Operation:
-          - Name: 变更ECS实例规格
-            Description: 变更ECS实例规格
-            Type: Custom
-            Parameters:
-              - EcsInstanceType
-          - Name: 变更ECS实例密码
-            Description: 变更ECS实例密码
-            Type: Custom
-            Parameters:
-              - InstancePassword
+    - TemplateName: ECS单机版
+      Operation:
+      - Name: 变更ECS实例规格
+        Description: 变更ECS实例规格
+        Type: Custom
+        Parameters:
+        - EcsInstanceType
+      - Name: 变更ECS实例密码
+        Description: 变更ECS实例密码
+        Type: Custom
+        Parameters:
+        - InstancePassword
   DeployMetadata:
     SupplierDeployMetadata:
       SupplierTemplateConfigs:
-        - Name: ECS单机版
-          Url: 'ros_templates/template.yaml'
-          ArchitectureDiagramUrl: 'resources/architecture/architecture.jpg'
-          AllowedRegions:
-            - ap-southeast-1
+      - Name: ECS单机版
+        Url: ros_templates/template.yaml
+        ArchitectureDiagramUrl: resources/architecture/architecture.jpg
+        AllowedRegions:
+        - ap-southeast-1
       ArtifactRelation:
         ecs_image_deepseek-bailian:
           ArtifactId: ${Artifact.EcsImage.ArtifactId}
           ArtifactVersion: draft
     TemplateConfigs:
-      - Name: ECS单机版
-        Url: 'ros_templates/template.yaml'
-        ArchitectureDiagramUrl: 'resources/architecture/architecture.jpg'
-        AllowedRegions:
-          - ap-southeast-1
+    - Name: ECS单机版
+      Url: ros_templates/template.yaml
+      ArchitectureDiagramUrl: resources/architecture/architecture.jpg
+      AllowedRegions:
+      - ap-southeast-1
   ServiceType: private
   ServiceInfo:
-    # 英文版可以再配置Locale为en-US的服务信息
-    - Locale: zh-CN
-      ShortDescription: demo
-      Image: 'resources/icons/service_logo.png'
+  - Locale: zh-CN
+    ShortDescription: demo
+    Image: resources/icons/service_logo.png
+    Softwares:
+    - Name: open-webui
+      Version: v0.6.41
 Artifact:
   EcsImage:
     ArtifactType: EcsImage
     ArtifactName: ecs_image_deepseek-bailian
     Description: deepseek-bailian EcsImage
     SupportRegionIds:
-        - ap-southeast-1
+    - ap-southeast-1
     ArtifactBuildProperty:
       CodeRepo:
         Platform: github
@@ -61,13 +63,23 @@ Artifact:
         Branch: main
       RegionId: ap-southeast-1
       CommandType: RunShellScript
-      CommandContent: |-
-        mkdir -p /root/application
-        if [ -e "/root/code/open-webui" ]; then cp -r "/root/code/open-webui" "/root/application/"; fi
-        if [ -e "/root/code/docker-compose.yaml" ]; then cp -r "/root/code/docker-compose.yaml" "/root/application/"; fi
-        if [ -e "/root/code/.env.example" ]; then cp -r "/root/code/.env.example" "/root/application/"; fi
+      CommandContent: 'mkdir -p /root/application
+
+        if [ -e "/root/code/open-webui" ]; then cp -r "/root/code/open-webui" "/root/application/";
+        fi
+
+        if [ -e "/root/code/docker-compose.yaml" ]; then cp -r "/root/code/docker-compose.yaml"
+        "/root/application/"; fi
+
+        if [ -e "/root/code/.env.example" ]; then cp -r "/root/code/.env.example"
+        "/root/application/"; fi
+
         cd /root/application
+
         cp .env.example ./.env
-        sed -i 's/pull_policy: always/pull_policy: if_not_present/g' docker-compose.yaml
+
+        sed -i ''s/pull_policy: always/pull_policy: if_not_present/g'' docker-compose.yaml
+
         docker compose -f docker-compose.yaml build
-        docker compose -f docker-compose.yaml pull || true;
+
+        docker compose -f docker-compose.yaml pull || true;'
